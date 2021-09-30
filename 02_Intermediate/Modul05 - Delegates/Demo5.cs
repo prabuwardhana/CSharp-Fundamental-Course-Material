@@ -2,10 +2,12 @@ using System;
 
 namespace WorkingWithDelegates
 {
-    //A generic delegate with covariant return type (out)
-    delegate TResult CovDelegate<out TResult>();
+    // A generic delegate with covariant return type (out)
+    // TResult can be only returned as method results
+    delegate TResult CovariantDelegate<out TResult>();
     // A generic contravariant delegate (in)
-    delegate void ContraDelegate<in T>(T param);
+    // T can be only passed as a parameter to a method
+    delegate void ContravariantDelegate<in T>(T param);
 
     class Animal
     {
@@ -27,11 +29,11 @@ namespace WorkingWithDelegates
     {
         public static void Run()
         {
-            Console.WriteLine("\n=== Covariant in Generic Delegate ===");
-            Console.WriteLine("=> Normal usage (Covariance):");
-            CovDelegate<Animal> covAnimalDelegate = GetOneAnimal;
+            Console.WriteLine("\n=== Covariance in Generic Delegate ===");
+            Console.WriteLine("=> Normal usage:");
+            CovariantDelegate<Animal> covAnimalDelegate = GetOneAnimal;
             covAnimalDelegate();
-            CovDelegate<Cat> covCatDelegate = GetOneCat;
+            CovariantDelegate<Cat> covCatDelegate = GetOneCat;
             covCatDelegate();
 
             Console.WriteLine("=> Using covariance:");
@@ -39,19 +41,41 @@ namespace WorkingWithDelegates
             covAnimalDelegate = covCatDelegate;
             covAnimalDelegate();
 
+            /** OUTPUT **/
+            /************************************
+            # === Covariance in Generic Delegate ===
+            # => Normal usage:
+            # Creating one animal and returning it.
+            # Creating one cat and returning it.
+            # => Using covariance:
+            # Creating one cat and returning it.
+            ************************************/
+
+            Console.WriteLine("\n=== Contravariance in Generic Delegate ===");
+
             Animal animal = new Animal();
             Cat cat = new Cat();
 
-            Console.WriteLine("\n=> Normal usage (Contravariance):");
-            ContraDelegate<Animal> contraAnimal = ShowAnimalType;
+            Console.WriteLine("\n=> Normal usage:");
+            ContravariantDelegate<Animal> contraAnimal = ShowAnimalType;
             contraAnimal(animal);
-            ContraDelegate<Cat> contraCat = ShowCatType;
+            ContravariantDelegate<Cat> contraCat = ShowCatType;
             contraCat(cat);
 
             Console.WriteLine("=> Using contravariance:");
             // We will receive a compile error if we do not use contravariance delegate
             contraCat = contraAnimal;
             contraCat(cat);
+
+            /** OUTPUT **/
+            /************************************
+            # === Contravariance in Generic Delegate ===
+            # => Normal usage:
+            #  Animal.ShowMe()
+            #  Cat.ShowMe()
+            # => Using contravariance:
+            #  Cat.ShowMe()
+            ************************************/
         }
 
         private static void ShowCatType(Cat cat)

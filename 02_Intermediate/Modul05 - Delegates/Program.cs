@@ -5,14 +5,14 @@
         static void Main(string[] args)
         {
             #region Simple delegate
-            Demo1.Run();                
+            // Demo1.Run();                
             #endregion
             
             #region Multicast delegate With void Return Type
             // Demo2.Run();                
             #endregion
 
-            #region Covariance in delegate
+            #region Variance in delegate
             // Demo3.Run();                
             #endregion
 
@@ -20,8 +20,8 @@
             // Demo4.Run();                
             #endregion
 
-            #region Covariant in generic delegate
-            // Demo5.Run();                
+            #region Variance in generic delegate
+            Demo5.Run();                
             #endregion            
         }        
     }
