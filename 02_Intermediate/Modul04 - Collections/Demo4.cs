@@ -30,16 +30,16 @@ namespace WorkingWithCollections
             }
             catch (ArgumentException)
             {
-                Console.WriteLine("Elemen dengan kunci = \"txt\" sudah ada");
+                Console.WriteLine("Element with key = \"txt\" already exist");
             }
 
             // Accessing element
-            Console.WriteLine("Nilai untuk kunci \"rtf\" = {0}", openWith["rtf"]);
+            Console.WriteLine("Value for key \"rtf\" = {0}", openWith["rtf"]);
 
             // The indexer can be used to change the value associated with a key.
-            Console.WriteLine("=> Ganti nilai pada elemen dengan kunci \"rtf\"");
+            Console.WriteLine("=> Change the value of element with key \"rtf\"");
             openWith["rtf"] = "winword.exe";
-            Console.WriteLine("Sekarang nilai untuk kunci \"rtf\" = {0}", openWith["rtf"]);
+            Console.WriteLine("Current value of key \"rtf\" = {0}", openWith["rtf"]);
 
             // If a key does not exist, setting the indexer for that key adds a new key/value pair.
             openWith["doc"] = "winword.exe";
@@ -50,11 +50,11 @@ namespace WorkingWithCollections
 
             try
             {
-                Console.WriteLine("Nilai untuk kunci \"tif\" = {0}", openWith["tif"]);
+                Console.WriteLine("Value of key \"tif\" = {0}", openWith["tif"]);
             }
             catch (KeyNotFoundException)
             {
-                Console.WriteLine("Kunci = \"tif\" tidak ditemukan!");
+                Console.WriteLine("Key = \"tif\" not found!");
             }
 
             // When a program often has to try keys that turn out not to be in the dictionary,
@@ -62,26 +62,26 @@ namespace WorkingWithCollections
             string value = "";
             if (openWith.TryGetValue("tif", out value))
             {
-                Console.WriteLine("Nilai untuk kunci \"tif\" = {0}", value);
+                Console.WriteLine("Value of key \"tif\" = {0}", value);
             }
             else
             {
-                Console.WriteLine("Kunci = \"tif\" tidak ditemukan!");
+                Console.WriteLine("Key = \"tif\" not found!");
             }
 
             // ContainsKey can be used to test keys before inserting them.
             if (!openWith.ContainsKey("ht"))
             {
                 openWith.Add("ht", "hypertrm.exe");
-                Console.WriteLine("Telah ditambahkan kunci \"ht\" dengan nilai: {0}", openWith["ht"]);
+                Console.WriteLine("A key \"ht\" has been added with value: {0}", openWith["ht"]);
             }
 
             // When you use foreach to enumerate dictionary elements, 
             // the elements are retrieved as KeyValuePair objects.
-            Console.WriteLine("\nPasangan key-value:");
+            Console.WriteLine("\nkey-value pair:");
             foreach (KeyValuePair<string, string> kvp in openWith)
             {
-                Console.WriteLine("\tKunci = {0}, Nilai = {1}", kvp.Key, kvp.Value);
+                Console.WriteLine("\tKey = {0}, Value = {1}", kvp.Key, kvp.Value);
             }
 
             // To get the values alone, use the Values property.
@@ -91,10 +91,10 @@ namespace WorkingWithCollections
 
             // The elements of the KeyCollection are strongly typed
             // with the type that was specified for dictionary keys.
-            Console.WriteLine("\nDaftar kunci pada koleksi 'openWith':");
+            Console.WriteLine("\nList of key in 'openWith' collection:");
             foreach (string s in keyColl)
             {
-                Console.WriteLine("\tkunci = {0}", s);
+                Console.WriteLine("\tkey = {0}", s);
             }
 
             // To get the values alone, use the Values property.
@@ -102,19 +102,19 @@ namespace WorkingWithCollections
 
             // The elements of the ValueCollection are strongly typed
             // with the type that was specified for dictionary values.
-            Console.WriteLine("\nDaftar nilai pada koleksi 'openWith':");
+            Console.WriteLine("\nList of value in 'openWith' collection:");
             foreach (string s in vallColl)
             {
-                Console.WriteLine("\tNilai = {0}", s);
+                Console.WriteLine("\tValue = {0}", s);
             }
 
-            Console.WriteLine("\n=> Hapus elemen dengan kunci (\"doc\")");
+            Console.WriteLine("\n=> Remove element with key (\"doc\")");
             openWith.Remove("doc");
 
-            Console.WriteLine("\n=> Cari elemen dengan kunci (\"doc\")");
+            Console.WriteLine("\n=> Find element with key (\"doc\")");
             if (!openWith.ContainsKey("doc"))
             {
-                Console.WriteLine("Elemen dengan kunci \"doc\" tidak ditemukan!");
+                Console.WriteLine("Element with key \"doc\" not found!");
             }
         }
     }

@@ -21,13 +21,18 @@ namespace WorkingWithCollections
             // Declare a generic collection which contains only integer value
             List<int> intList = new List<int>();
 
-            // The values are all allocated on the stack
+            // The values are all allocated in the stack
             intList.Add(10);
             intList.Add(20);
             intList.Add(30);
             intList.Add(40);
             intList.Add(50);
 
+            /**********************************************
+            # List<T> solves the issue of type safety.
+            # In our case, we have declared intList as List of int (List<int>)
+            # consequently intList only accept int
+            **********************************************/
             // // Error! Argument '1' cannot convert from 'bool' to 'int'
             // intList.Add(true);
             // // Error! Argument '1' cannot convert from 'bool' to 'int'
@@ -38,11 +43,11 @@ namespace WorkingWithCollections
             // Remove() returns true or false
             if (intList.Remove(60))
             {
-                Console.WriteLine("Sukses");
+                Console.WriteLine("Success");
             }
             else
             {
-                Console.WriteLine("Gagal");
+                Console.WriteLine("Fail");
             }
 
             // RemoveAt() returns void
@@ -76,7 +81,7 @@ namespace WorkingWithCollections
             }
 
             int numOfRemovedElements = intList.RemoveAll(IsMoreThan70);
-            Console.WriteLine($"Sejumlah {numOfRemovedElements} item telah dihapus dari daftar");            
+            Console.WriteLine($"Some {numOfRemovedElements} items has been removed from the list");            
 
             // Initialization syntax
             List<int> myIntList = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };            

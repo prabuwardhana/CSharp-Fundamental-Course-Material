@@ -7,29 +7,42 @@ namespace WorkingWithCollections
     {
         public static void Run()
         {
-            string[] strArray = { "Pertama", "Kedua", "Ketiga" };
+            string[] strArray = { "first", "second", "third" };
 
             // Dynamically resized container
             ArrayList strArrayList = new ArrayList();
             // use AddRange() to add range of items
             strArrayList.AddRange(strArray);
 
-            Console.WriteLine("'strArrayList' memiliki {0} elemen\n", strArrayList.Count);
+            Console.WriteLine("'strArrayList' has {0} elements\n", strArrayList.Count);
 
             // use Add() to add single item
-            Console.WriteLine("=> Tambah elemen keempat");
-            strArrayList.Add("Keempat");
-            Console.WriteLine("Sekarang 'strArrayList' memiliki {0} elemen\n", strArrayList.Count);
+            Console.WriteLine("=> add the fourth element");
+            strArrayList.Add("fourth");
+            Console.WriteLine("Now, 'strArrayList' has {0} elements\n", strArrayList.Count);
 
-            Console.WriteLine("Elemen-elemen pada 'strArrayList': ");
+            Console.WriteLine("Elements in 'strArrayList': ");
             foreach (string s in strArrayList)
             {
                 Console.Write($"{s} ");
             }
 
-            /* ISSUE OF NON-GENERIC COLLECTIONS */
+            /** OUTPUT **/
+            /**********************************************
+            # 'strArrayList' has 3 elements
+            # 
+            # => add the fourth element
+            # Now, 'strArrayList' has 4 elements
+            # 
+            # Elements in 'strArrayList':       
+            # first second third fourth
+            **********************************************/
 
-            // #1 Issue of performance (Boxing and Unboxing)
+            /** ISSUE OF NON-GENERIC COLLECTIONS **/
+            /**********************************************
+            # [1] Issue of performance (Boxing and Unboxing)
+            **********************************************/
+            
             ArrayList intArrayList = new ArrayList();
             // Value types are automatically boxed when passed to a member requesting an object.
             intArrayList.Add(10);
@@ -47,7 +60,9 @@ namespace WorkingWithCollections
             4. The now unused object on the heap will (eventually) be garbage collected.
             *************************************************************************************************/
 
-            // #2 Issue of Type Safety
+            /**********************************************
+            # [2] Issue of Type Safety
+            **********************************************/
             ArrayList objArray = new ArrayList();
             objArray.Add(true);
             objArray.Add(10);

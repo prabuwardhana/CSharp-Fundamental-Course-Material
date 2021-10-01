@@ -14,11 +14,11 @@
             #endregion
 
             #region List<T> Class
-            // Demo3.Run();
+            Demo3.Run();
             #endregion
 
             #region Dictionary<TKey,TValue> Class
-            Demo4.Run();
+            // Demo4.Run();
             #endregion
 
             #region HashSet<T> Class

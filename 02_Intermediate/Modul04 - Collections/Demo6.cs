@@ -85,10 +85,10 @@ namespace WorkingWithCollections
                     docFiles.Add(f.Substring(f.LastIndexOf(@"\") + 1));
                 }
 
-                Console.WriteLine("SEMUA FILE: ");
+                Console.WriteLine("ALL FILES: ");
                 DisplayStringSet(docFiles);
 
-                Console.WriteLine("FILE PDF: ");
+                Console.WriteLine("PDF FILES: ");
 
                 SortedSet<string> pdfFiles = docFiles.GetViewBetween("pde", "pdg");
 
