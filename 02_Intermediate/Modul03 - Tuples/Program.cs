@@ -73,7 +73,7 @@ namespace WorkingWithTuples
             }
             else
             {
-                Console.WriteLine("Bilangan pembagi tidak boleh bernilai 0");
+                Console.WriteLine("Denominator cannot be zero");
                 hasil.Desimal = 0;
                 hasil.Bulat = 0;
             }
