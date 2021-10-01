@@ -21,11 +21,16 @@ namespace AnonymousMethodLambda
             Predicate<int> predicate = IsEvenNumber;
             List<int> evenNumber = list.FindAll(predicate);
 
-            Console.Write("Daftar baru dengan bilangan genap: ");
+            Console.Write("New list contains only even numbers: ");
             foreach (int i in evenNumber)
             {
                 Console.Write("{0} ", i);
             }
+
+            /** OUTPUT **/
+            /**********************************************
+            # New list contains only even numbers: 20 4 8 44
+            **********************************************/
         }
 
         private static bool IsEvenNumber(int num)
