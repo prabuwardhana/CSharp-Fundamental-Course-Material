@@ -8,10 +8,13 @@ using System;
 
 namespace WorkingWithEvents
 {
-    public class Demo2Sender
+    public class Demo2Publisher
     {
-        // using predefined delegate
-        // signature: delegate void System.EventHandler(object sender, System.EventArgs e)
+        /**********************************************
+        # [1] Define your event type using predifined delegate
+        # using predefined delegate
+        # signature: public delegate void System.EventHandler(object sender, System.EventArgs e)
+        **********************************************/
         public event EventHandler ValueChanged;
 
         private int myInt;
@@ -27,36 +30,57 @@ namespace WorkingWithEvents
 
         protected virtual void RaiseValueChangedEvent()
         {
-            // param1 = the sender is the object itself
-            // param2 = send an empty event arguments
+            /**********************************************
+            # [2] Raise the event.
+            # param1 = the sender is the object itself
+            # param2 = send an empty event arguments
+            **********************************************/
             ValueChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 
-    public class Demo2Receiver
+    public class Demo2Subscriber
     {
-        // [4] Handle the event
-        public void OnMyIntNumberValueChanged(object sender, EventArgs e) => Console.WriteLine($"Notifikasi dari pengirim: {e}");
+        /**********************************************
+        # [3] Handle the event
+        **********************************************/
+        public void OnMyIntNumberValueChanged(object sender, EventArgs e) => Console.WriteLine($"Notification from publisher: {e}");
     }
 
     public class Demo2
     {
         public static void Run()
         {
-            Demo2Sender demo2Sender = new Demo2Sender();
-            Demo2Receiver demo2Receiver = new Demo2Receiver();
+            Demo2Publisher demo2Publisher = new Demo2Publisher();
+            Demo2Subscriber demo2Subscriber = new Demo2Subscriber();
 
-            // demo2Receiver is registering for a notification from demo2Sender
-            demo2Sender.ValueChanged += demo2Receiver.OnMyIntNumberValueChanged;
+            // demo2Subscriber is registering for a notification from demo2Publisher
+            Console.WriteLine("=> demo2Subscriber is registering for a notification from demo2Publisher");
+            demo2Publisher.ValueChanged += demo2Subscriber.OnMyIntNumberValueChanged;
 
-            demo2Sender.MyIntNumber = 1;
-            demo2Sender.MyIntNumber = 2;
+            Console.WriteLine("=> demo2Publisher.MyIntNumber = 1");
+            demo2Publisher.MyIntNumber = 1;
+            Console.WriteLine("=> demo2Publisher.MyIntNumber = 2");
+            demo2Publisher.MyIntNumber = 2;
 
             // unregistering now
-            demo2Sender.ValueChanged -= demo2Receiver.OnMyIntNumberValueChanged;
+            Console.WriteLine("=> Unsubscribing");
+            demo2Publisher.ValueChanged -= demo2Subscriber.OnMyIntNumberValueChanged;
 
             // No notification sent for the receiver now.
-            demo2Sender.MyIntNumber = 3;
+            Console.WriteLine("=> demo2Publisher.MyIntNumber = 2");
+            demo2Publisher.MyIntNumber = 3;
+
+            /** OUTPUT **/
+            /**********************************************
+            # => demo2Subscriber is registering for a notification from demo2Publisher
+            # => demo2Publisher.MyIntNumber = 1
+            # Notification from publisher: System.EventArgs
+            # => demo2Publisher.MyIntNumber = 2
+            # Notification from publisher: System.EventArgs
+            # => Unsubscribing
+            # => demo2Publisher.MyIntNumber = 3
+            **********************************************/
         }
     }
 }

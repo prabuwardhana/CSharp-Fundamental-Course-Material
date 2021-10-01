@@ -10,12 +10,14 @@ namespace WorkingWithEvents
 {
     public interface IAInterface
     {
-        event EventHandler<ValueChangedEventArgsDemo5> ValueChanged;
+        // Raise this when the value is about to change
+        event EventHandler<ValueChangedEventArgsDemo5> onValueChanged;
     }
 
     public interface IBInterface
     {
-        event EventHandler<ValueChangedEventArgsDemo5> ValueChanged;
+        // Raise this event when the value has changed
+        event EventHandler<ValueChangedEventArgsDemo5> onValueChanged;
     }
 
     public class ValueChangedEventArgsDemo5 : EventArgs
@@ -30,7 +32,7 @@ namespace WorkingWithEvents
         }
     }
 
-    public class Demo5Sender : IAInterface, IBInterface
+    public class Demo5Publisher : IAInterface, IBInterface
     {
         private int myInt;
         public int MyIntNumber
@@ -38,78 +40,78 @@ namespace WorkingWithEvents
             get { return myInt; }
             set 
             { 
-                RaiseValueChangedEvent_A();
+                RaiseOnValueWillChangeEvent();
                 Console.WriteLine($"==> Mengubah nilai MyIntNumber dari {myInt} ke {value}.");
                 myInt = value;
-                RaiseValueChangedEvent_B();
+                RaiseOnValueHasChangedEvent();
             }
         }
 
         object objectLock = new Object();
 
         // delegate
-        private EventHandler<ValueChangedEventArgsDemo5> ValueChangedA;
+        private EventHandler<ValueChangedEventArgsDemo5> onValueWillChange;
 
         // Explicit interface implementation required.
-        event EventHandler<ValueChangedEventArgsDemo5> IAInterface.ValueChanged
+        event EventHandler<ValueChangedEventArgsDemo5> IAInterface.onValueChanged
         {
             add
             {
                 lock (objectLock)
                 {
-                    ValueChangedA += value;
+                    onValueWillChange += value;
                 }
             }
             remove
             {
                 lock (objectLock)
                 {
-                    ValueChangedA -= value;
+                    onValueWillChange -= value;
                 }
             }
         }
 
         // delegate
-        private EventHandler<ValueChangedEventArgsDemo5> ValueChangedB;
+        private EventHandler<ValueChangedEventArgsDemo5> onValueHasChanged;
 
         // Explicit interface implementation required.
-        event EventHandler<ValueChangedEventArgsDemo5> IBInterface.ValueChanged
+        event EventHandler<ValueChangedEventArgsDemo5> IBInterface.onValueChanged
         {
             add
             {
                 lock (objectLock)
                 {
-                    ValueChangedB += value;
+                    onValueHasChanged += value;
                 }
             }
             remove
             {
                 lock (objectLock)
                 {
-                    ValueChangedB -= value;
+                    onValueHasChanged -= value;
                 }
             }
         }
 
-        protected virtual void RaiseValueChangedEvent_A()
+        protected virtual void RaiseOnValueWillChangeEvent()
         {
-            ValueChangedA?.Invoke(this, new ValueChangedEventArgsDemo5("Nilai MyIntNumber akan diubah", myInt));
+            onValueWillChange?.Invoke(this, new ValueChangedEventArgsDemo5("The value of MyIntNumber will be changed", myInt));
         }
 
-        protected virtual void RaiseValueChangedEvent_B()
+        protected virtual void RaiseOnValueHasChangedEvent()
         {
-            ValueChangedB?.Invoke(this, new ValueChangedEventArgsDemo5("Nilai MyIntNumber telah diubah", myInt));
+            onValueHasChanged?.Invoke(this, new ValueChangedEventArgsDemo5("MyIntNumber value has changed", myInt));
         }
     }
 
-    public class Demo5Receiver1
+    public class Demo5Subscriber1
     {
         private readonly IAInterface sender;
 
-        public Demo5Receiver1(Demo5Sender sndr)
+        public Demo5Subscriber1(Demo5Publisher sndr)
         {
             this.sender = (IAInterface)sndr;
-            this.sender.ValueChanged += OnMyIntNumberValueChanged;
+            this.sender.onValueChanged += OnMyIntNumberValueChanged;
         }
 
         private void OnMyIntNumberValueChanged(object sender, ValueChangedEventArgsDemo5 e) 
@@ -117,18 +119,18 @@ namespace WorkingWithEvents
 
         public void UnregisterEvent()
         {
-            this.sender.ValueChanged -= OnMyIntNumberValueChanged;
+            this.sender.onValueChanged -= OnMyIntNumberValueChanged;
         }
     }
 
-    public class Demo5Receiver2
+    public class Demo5Subscriber2
     {
         private readonly IBInterface sender;
 
-        public Demo5Receiver2(Demo5Sender sender)
+        public Demo5Subscriber2(Demo5Publisher sender)
         {
             this.sender = (IBInterface)sender;
-            this.sender.ValueChanged += OnMyIntNumberValueChanged;
+            this.sender.onValueChanged += OnMyIntNumberValueChanged;
         }
 
         private void OnMyIntNumberValueChanged(object sender, ValueChangedEventArgsDemo5 e) 
@@ -136,7 +138,7 @@ namespace WorkingWithEvents
         
         public void UnregisterEvent()
         {
-            this.sender.ValueChanged -= OnMyIntNumberValueChanged;
+            this.sender.onValueChanged -= OnMyIntNumberValueChanged;
         }
     }
 
@@ -144,9 +146,9 @@ namespace WorkingWithEvents
     {
         public static void Run()
         {
-            Demo5Sender demo5Sender = new Demo5Sender();
-            Demo5Receiver1 demo5Receiver1 = new Demo5Receiver1(demo5Sender);
-            Demo5Receiver2 demo5Receiver2 = new Demo5Receiver2(demo5Sender);
+            Demo5Publisher demo5Sender = new Demo5Publisher();
+            Demo5Subscriber1 demo5Receiver1 = new Demo5Subscriber1(demo5Sender);
+            Demo5Subscriber2 demo5Receiver2 = new Demo5Subscriber2(demo5Sender);
 
             // Sender changes its property
             demo5Sender.MyIntNumber = 1;

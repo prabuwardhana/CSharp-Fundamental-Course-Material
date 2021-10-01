@@ -10,6 +10,9 @@ using System.Threading;
 
 namespace WorkingWithEvents
 {
+    /**********************************************
+    # [1] Define custom event data class that derives from the EventArgs class.
+    **********************************************/
     public class ValueChangedEventArgs : EventArgs
     {
         public string Message { get; }
@@ -22,70 +25,71 @@ namespace WorkingWithEvents
         }
     }
 
-    // public delegate void ValueChangedEventHandler2(object sender, ValueChangedEventArgs eventArgs);
-
-    public class Demo3Sender
-    {        
-        // public event ValueChangedEventHandler2 ValueChanged;
-
-        // equivalent code using generic EventHandler:
+    public class Demo3Publisher
+    {
+        /**********************************************
+        # [2] Define your event type using predifined generic EventHandler delegate
+        **********************************************/
         public event EventHandler<ValueChangedEventArgs> ValueChanged; 
 
         // How C# compiler translates the above single line of code:
         #region C# compiler's generated code
-        // // 1. A PRIVATE delegate field that is initialized to null (no listeners have registered interest in the event)
-        //
-        // private EventHandler<ValueChangedEventArgs> ValueChanged = null;
-        
-        // // 2. A PUBLIC add_Xxx method (where Xxx is the Event name)
-        // // Allows methods to register interest in the event.
-        //
-        // public void add_ValueChanged(EventHandler<ValueChangedEventArgs> value)
-        // {
-        //     // The loop and the call to CompareExchange is all just a fancy way
-        //     // of adding a delegate to the event in a thread-safe way
-        //     EventHandler<ValueChangedEventArgs> prevHandler;
-        //     EventHandler<ValueChangedEventArgs> valueChanged = this.ValueChanged;
-        //     do 
-        //     {
-        //         prevHandler = valueChanged;
-
-        //         // adds the instance of a delegate to the list of delegates and returns the new head of the list, 
-        //         // which gets saved back in the field 
-        //         EventHandler<ValueChangedEventArgs> newHandler =
-        //         (EventHandler<ValueChangedEventArgs>) Delegate.Combine(prevHandler, value);
-
-        //         valueChanged = Interlocked.CompareExchange<EventHandler<ValueChangedEventArgs>>(ref this.ValueChanged,
-        //                                                                                         newHandler,
-        //                                                                                         prevHandler);
-        //     } while (valueChanged != prevHandler);
-        // }
-
-        // // 3. A PUBLIC remove_Xxx method (where Xxx is the Event name)
-        // // Allows methods to unregister interest in the event.
-        //
-        // public void remove_ValueChanged(EventHandler<ValueChangedEventArgs> value) {
-        //     // The loop and the call to CompareExchange is all just a fancy way
-        //     // of removing a delegate from the event in a thread-safe way
-        //     EventHandler<ValueChangedEventArgs> prevHandler;
-        //     EventHandler<ValueChangedEventArgs> valueChanged = this.ValueChanged;
-        //     do 
-        //     {
-        //         prevHandler = valueChanged;
-
-        //         EventHandler<ValueChangedEventArgs> newHandler =
-        //         (EventHandler<ValueChangedEventArgs>) Delegate.Remove(prevHandler, value);
-
-        //         valueChanged = Interlocked.CompareExchange<EventHandler<ValueChangedEventArgs>>(ref this.ValueChanged,
-        //                                                                                         newHandler,
-        //                                                                                         prevHandler);
-        //     } while (valueChanged != prevHandler);
-        // }    
+        /**********************************************
+        # # 1. A PRIVATE delegate field that is initialized to null (no listeners have registered interest in the event)
+        #
+        # private EventHandler<ValueChangedEventArgs> ValueChanged = null;
+        #
+        # # 2. A PUBLIC add_Xxx method (where Xxx is the Event name)
+        # # Allows methods to register interest in the event.
+        #
+        # public void add_ValueChanged(EventHandler<ValueChangedEventArgs> value)
+        # {
+        #     // The loop and the call to CompareExchange is all just a fancy way
+        #     // of adding a delegate to the event in a thread-safe way
+        #     EventHandler<ValueChangedEventArgs> prevHandler;
+        #     EventHandler<ValueChangedEventArgs> valueChanged = this.ValueChanged;
+        #     do 
+        #     {
+        #         prevHandler = valueChanged;
+        #
+        #         // adds the instance of a delegate to the list of delegates and returns the new head of the list, 
+        #         // which gets saved back in the field 
+        #         EventHandler<ValueChangedEventArgs> newHandler =
+        #         (EventHandler<ValueChangedEventArgs>) Delegate.Combine(prevHandler, value);
+        #
+        #         valueChanged = Interlocked.CompareExchange<EventHandler<ValueChangedEventArgs>>(ref this.ValueChanged,
+        #                                                                                         newHandler,
+        #                                                                                         prevHandler);
+        #     } while (valueChanged != prevHandler);
+        # }
+        #
+        # # 3. A PUBLIC remove_Xxx method (where Xxx is the Event name)
+        # # Allows methods to unregister interest in the event.
+        #
+        # public void remove_ValueChanged(EventHandler<ValueChangedEventArgs> value) {
+        #     # The loop and the call to CompareExchange is all just a fancy way
+        #     # of removing a delegate from the event in a thread-safe way
+        #     EventHandler<ValueChangedEventArgs> prevHandler;
+        #     EventHandler<ValueChangedEventArgs> valueChanged = this.ValueChanged;
+        #     do 
+        #     {
+        #         prevHandler = valueChanged;
+        #
+        #         EventHandler<ValueChangedEventArgs> newHandler =
+        #         (EventHandler<ValueChangedEventArgs>) Delegate.Remove(prevHandler, value);
+        #
+        #         valueChanged = Interlocked.CompareExchange<EventHandler<ValueChangedEventArgs>>(ref this.ValueChanged,
+        #                                                                                         newHandler,
+        #                                                                                         prevHandler);
+        #     } while (valueChanged != prevHandler);
+        # }    
+        **********************************************/
         #endregion        
 
-        // // compiler will still generate private delegate EventHandler even if it is unused
-        // // could be a waste of memory if a class has many unused event handlers.
-        //
+        /**********************************************
+        # compiler will still generate private delegate EventHandler even if it is unused
+        # could be a waste of memory if a class has many unused event handlers.
+        **********************************************/
         // public event EventHandler UnusedEvent; => this code generates compiler warning CS0067
 
         private int myInt;
@@ -102,40 +106,65 @@ namespace WorkingWithEvents
 
         protected virtual void RaiseValueChangedEvent()
         {
-            ValueChanged?.Invoke(this, new ValueChangedEventArgs("Nilai MyIntNumber telah berubah", myInt));
+            /**********************************************
+            # [3] Raise the event.
+            # param1 = the sender is the object itself
+            # param2 = send an EventArgs object
+            **********************************************/
+            ValueChanged?.Invoke(this, new ValueChangedEventArgs("MyIntNumber value has changed", myInt));
         }
     }
 
-    public class Demo3Receiver
+    public class Demo3Subscriber
     {
+        /**********************************************
+        # [4] Handle the event
+        **********************************************/
         public void OnMyIntNumberValueChanged(object sender, ValueChangedEventArgs e) 
-            => Console.WriteLine($"Notifikasi dari pengirim: {e.Message}, nilai sekarang: {e.CurrentValue}");
+            => Console.WriteLine($"Notification from publisher: {e.Message}, current value: {e.CurrentValue}");
     }
 
     public class Demo3
     {
         public static void Run()
         {
-            Demo3Sender demo3Sender = new Demo3Sender();
-            Demo3Receiver demo3Receiver = new Demo3Receiver();
+            Demo3Publisher demo3Publisher = new Demo3Publisher();
+            Demo3Subscriber demo3Subscriber = new Demo3Subscriber();
 
-            // // direct assignment is not allowed
-            // // By using event keyword compiler protects our field from unwanted access.
-            // // prevent code outside the defining class from manipulating it improperly
-            //
-            // demo3Sender.ValueChanged = demo3Receiver.OnMyIntNumberValueChanged;
+            /**********************************************
+            # direct assignment is not allowed
+            # By using event keyword compiler protects our field from unwanted access.
+            # prevent code outside the defining class from manipulating it improperly
+            **********************************************/
+            // demo3Sender.ValueChanged = demo3Subscriber.OnMyIntNumberValueChanged;
 
-            // demo3Receiver is registering for a notification from demo1Sender
-            demo3Sender.ValueChanged += demo3Receiver.OnMyIntNumberValueChanged;
+            // demo3Subscriber is registering for a notification from demo3Publisher
+            Console.WriteLine("=> demo3Subscriber is registering for a notification from demo3Publisher");
+            demo3Publisher.ValueChanged += demo3Subscriber.OnMyIntNumberValueChanged;
 
-            demo3Sender.MyIntNumber = 1;
-            demo3Sender.MyIntNumber = 2;
+            Console.WriteLine("=> demo3Publisher.MyIntNumber = 1");
+            demo3Publisher.MyIntNumber = 1;
+            Console.WriteLine("=> demo3Publisher.MyIntNumber = 2");
+            demo3Publisher.MyIntNumber = 2;
 
             // unregistering now
-            demo3Sender.ValueChanged -= demo3Receiver.OnMyIntNumberValueChanged;
+            Console.WriteLine("=> Unsubscribing");
+            demo3Publisher.ValueChanged -= demo3Subscriber.OnMyIntNumberValueChanged;
 
             // No notification sent for the receiver now.
-            demo3Sender.MyIntNumber = 3;
+            Console.WriteLine("=> demo3Publisher.MyIntNumber = 3");
+            demo3Publisher.MyIntNumber = 3;
+
+            /** OUTPUT **/
+            /**********************************************
+            # => demo3Subscriber is registering for a notification from demo3Publisher
+            # => demo3Publisher.MyIntNumber = 1
+            # Notification from publisher: System.EventArgs
+            # => demo3Publisher.MyIntNumber = 2
+            # Notification from publisher: System.EventArgs
+            # => Unsubscribing
+            # => demo3Publisher.MyIntNumber = 3
+            **********************************************/
         }
     }
 }

@@ -8,15 +8,19 @@ using System;
 
 namespace WorkingWithEvents
 {
-    // [1] Create a delegate. 
-    // By convention, choose the delegate name with the EventHandler suffix;
+    /**********************************************
+    # [1] Create a delegate. 
+    # By convention, choose the delegate name with the EventHandler suffix;
+    **********************************************/
     public delegate void ValueChangedEventHandler(string msg);
 
-    public class Demo1Sender
+    public class Demo1Publisher
     {
-        // [2] Define your event
-        // As a convention, you can drop the  EventHandler suffix from the delegate name 
-        // and set your event name.
+        /**********************************************
+        # [2] Define your event type
+        # As a convention, you can drop the  EventHandler suffix from the delegate name 
+        # and set your event name.
+        **********************************************/
         public event ValueChangedEventHandler ValueChanged;
 
         private int myInt;
@@ -31,45 +35,65 @@ namespace WorkingWithEvents
             }
         }
 
-        // [3] Raise the event.
-        // In general, instead of making the method public, 
-        // it is suggested that you make the method protected virtual.
+        /**********************************************
+        # [3] Raise the event.
+        # In general, instead of making the method public, 
+        # it is suggested that you make the method protected virtual.
+        **********************************************/
         protected virtual void RaiseValueChangedEvent()
         {
-            ValueChanged?.Invoke("Nilai MyIntNumber telah berubah");
+            ValueChanged?.Invoke("MyIntNumber value has changed");
 
             // this statement is equivalent to the above statement
             // if (ValueChanged != null)
             // {
-            //     ValueChanged("Nilai MyIntNumber telah berubah");
+            //     ValueChanged("MyIntNumber value has changed");
             // }
         }
     }
 
-    public class Demo1Receiver
+    public class Demo1Subscriber
     {
-        // [4] Handle the event
-        public void OnMyIntNumberValueChanged(string msg) => Console.WriteLine($"Notifikasi dari pengirim: {msg}");
+        /**********************************************
+        # [4] Handle the event
+        **********************************************/
+        public void OnMyIntNumberValueChanged(string msg) => Console.WriteLine($"Notification from publisher: {msg}");
     }
 
     public class Demo1
     {
         public static void Run()
         {
-            Demo1Sender demo1Sender = new Demo1Sender();
-            Demo1Receiver demo1Receiver = new Demo1Receiver();
+            Demo1Publisher demo1Publisher = new Demo1Publisher();
+            Demo1Subscriber demo1Subscriber = new Demo1Subscriber();
 
-            // demo1Receiver is registering for a notification from demo1Sender
-            demo1Sender.ValueChanged += demo1Receiver.OnMyIntNumberValueChanged;
+            // demo1Publisher is registering for a notification from demo1Subscriber
+            Console.WriteLine("=> demo1Publisher is registering for a notification from demo1Subscriber");
+            demo1Publisher.ValueChanged += demo1Subscriber.OnMyIntNumberValueChanged;
 
-            demo1Sender.MyIntNumber = 1;
-            demo1Sender.MyIntNumber = 2;
+            Console.WriteLine("=> demo1Publisher.MyIntNumber = 1");
+            demo1Publisher.MyIntNumber = 1;
+            Console.WriteLine("=> demo1Publisher.MyIntNumber = 2");
+            demo1Publisher.MyIntNumber = 2;
 
             // unregistering now
-            demo1Sender.ValueChanged -= demo1Receiver.OnMyIntNumberValueChanged;
+            Console.WriteLine("=> Unsubscribing");
+            demo1Publisher.ValueChanged -= demo1Subscriber.OnMyIntNumberValueChanged;
 
             // No notification sent for the receiver now.
-            demo1Sender.MyIntNumber = 3;
+            Console.WriteLine("=> demo1Publisher.MyIntNumber = 3");
+            demo1Publisher.MyIntNumber = 3;
+
+            /** OUTPUT **/
+            /**********************************************
+            # => Subscribing
+            # => demo1Publisher.MyIntNumber = 1
+            # Notification from publisher: MyIntNumber value has changed
+            # => demo1Publisher.MyIntNumber = 2
+            # Notification from publisher: MyIntNumber value has changed
+            # => Unsubscribing
+            # => demo1Publisher.MyIntNumber = 3
+            **********************************************/
         }
     }
 }
