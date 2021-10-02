@@ -36,7 +36,7 @@ namespace HandlingException
                 ArithmeticB arithmeticB = new ArithmeticB();
                 int resultB = arithmeticB.GetResult(20, 0);
 
-                Console.WriteLine($"Hasil: {resultB}");
+                Console.WriteLine($"Result: {resultB}");
             }
             catch (Exception ex)
             {

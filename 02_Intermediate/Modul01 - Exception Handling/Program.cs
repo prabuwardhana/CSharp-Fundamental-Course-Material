@@ -7,7 +7,7 @@ namespace HandlingException
         static void Main(string[] args)
         {
             #region Triggering an exception                
-            // Demo1.Run();
+            Demo1.Run();
             #endregion
 
             #region Simple exception handling
@@ -24,16 +24,16 @@ namespace HandlingException
 
             #region Advance exception handling
             // Demo5.Run(args);
-            try
-            {
-                Demo5.Run(args);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("\n=== Dari method Main() ===");
-                Console.WriteLine("Pesan: {0}", ex.Message);
-                Console.WriteLine("Stack: \n{0}", ex.StackTrace);
-            }
+            // try
+            // {
+            //     Demo5.Run(args);
+            // }
+            // catch (Exception ex)
+            // {
+            //     Console.WriteLine("\n=== Dari method Main() ===");
+            //     Console.WriteLine("Pesan: {0}", ex.Message);
+            //     Console.WriteLine("Stack: \n{0}", ex.StackTrace);
+            // }
             #endregion
         }
     }

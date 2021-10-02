@@ -13,7 +13,7 @@ namespace HandlingException
             */
             int result = Division(20, 0);
 
-            Console.WriteLine($"Hasil: {result}");
+            Console.WriteLine($"Result: {result}");
         }
 
         private static int Division(int numerator, int denominator)

@@ -19,7 +19,7 @@ namespace HandlingException.HelperClass
         {
             if (String.IsNullOrEmpty(name))
             {
-                throw new ArgumentException("Nama tidak boleh kosong!");
+                throw new ArgumentException("Name cannot be empty!");
             }
 
             Regex regex = new Regex("^[a-zA-Z]+$");
@@ -29,10 +29,10 @@ namespace HandlingException.HelperClass
                 // Console.WriteLine("Nama tidak valid!"); 
                 // throw new Exception($"{name} bukan nama yang valid!");
                 // Exception e = new Exception($"{name} bukan nama yang valid!");
-                InvalidNameException e = new InvalidNameException($"{name} bukan nama yang valid!");
+                InvalidNameException e = new InvalidNameException($"{name} is not a valid name!");
                 
-                e.Data.Add("Waktu eror", DateTime.Now);
-                e.Data.Add("Penyebab", "Nama mengandung karakter selain huruf");
+                e.Data.Add("Error time", DateTime.Now);
+                e.Data.Add("Cause of error", "Name contains invalid character");
                 e.HelpLink = "https://mahirkoding.id";
                 throw e;
             }

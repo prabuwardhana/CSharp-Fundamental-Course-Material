@@ -15,29 +15,29 @@ namespace HandlingException
             {
                 if (student.ValidateName(student.Name))
                 {
-                    Console.WriteLine("Nama: {0}", student.Name);
+                    Console.WriteLine("Name: {0}", student.Name);
                 }
             }
             catch (InvalidNameException e)
             {
                 // Method from where the exception is thrown
-                Console.WriteLine("-> Terjadi eksepsi yang berasal dari: {0}", e.TargetSite);
-                Console.WriteLine("-> Yang didefinisikan pada class: {0}", e.TargetSite.DeclaringType);
-                Console.WriteLine("-> Tipe member: {0}", e.TargetSite.MemberType);
+                Console.WriteLine("-> Exception rised at method: {0}", e.TargetSite);
+                Console.WriteLine("-> defined in class: {0}", e.TargetSite.DeclaringType);
+                Console.WriteLine("-> Member type: {0}", e.TargetSite.MemberType);
 
                 // Exception message
-                Console.WriteLine("-> Pesan: {0}", e.Message);
+                Console.WriteLine("-> Message: {0}", e.Message);
 
                 // Assembly from where the exception is thrown
                 Console.WriteLine("-> Assembly: {0}", e.Source);
 
                 // Additional custom data
-                Console.WriteLine("-> Data tambahan:");
+                Console.WriteLine("-> Additional data:");
                 foreach (DictionaryEntry de in e.Data)
                 {
                     Console.WriteLine("\t{0}: {1}", de.Key, de.Value);
                 }
-                Console.WriteLine("\tCari bantuan di {0}", e.HelpLink);
+                Console.WriteLine("\tGet help {0}", e.HelpLink);
 
                 // Stack trace
                 Console.WriteLine("-> Stack: \n{0}", e.StackTrace);
@@ -56,7 +56,7 @@ namespace HandlingException
             }
             finally
             {
-                Console.WriteLine("Kode dalam blok finally akan selalu dijalankan baik ada eksepsi atau tidak");
+                Console.WriteLine("Code inside the finally block will always be executed wheter there is exceptions or not");
             }
         }
     }
